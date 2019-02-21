@@ -5,7 +5,7 @@ image_handler/lambda_rewrite.py,sha256=mCCSANUsU8r28mUkRSXC4Apjm1M928mjhYWa2w1M3
 image_handler/setup.py,sha256=d--VUdwj7G91KCXUOt5sqeHFCXBQXzoEXUuY7k3neiU,1411
 image_handler/thumbor.conf,sha256=uEu1-xruaq_1BjcZ9Sj3Y3uvmeH8aOx5itHWGv--aOI,9568
 image_handler-3.0.dist-info/METADATA,sha256=z6tGWKWo6IhPMBSwIkN992INhJREHBHh7fBBruFDqVE,726
-image_handler-3.0.dist-info/WHEEL,sha256=-J0fjkbRGEJHm-BQGjzdMhZ5vCtm0jNtN8HEGGAlhZw,93
+image_handler-3.0.dist-info/WHEEL,sha256=wy6I0RkXf1SHQI9WgMGMZtkrPqc-c49UWrTH1_nKFnQ,93
 image_handler-3.0.dist-info/top_level.txt,sha256=a2MsZrI4jYtfEgBqGByfgykr_HkHBI7cONezKAg3CWo,14
 image_handler-3.0.dist-info/RECORD,,
 image_handler-3.0.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4

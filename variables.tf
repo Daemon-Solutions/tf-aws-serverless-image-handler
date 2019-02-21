@@ -124,7 +124,7 @@ variable "log_retention" {
 }
 
 variable "logs_filter_pattern" {
-  default = ""
+  default = "?\"[INFO]\" ?\"[WARNING]\" ?\"[ERROR]\""
 }
 
 variable "enable_s3_logs" {
