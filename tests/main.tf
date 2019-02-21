@@ -3,8 +3,10 @@ module "serverless_image_handler" {
 
   origin_bucket = "${aws_s3_bucket.media.id}"
 
-  aliases             = ["media.trynotto.click"]
-  acm_certificate_arn = "${aws_acm_certificate.media.arn}"
+  cf_aliases             = ["media.trynotto.click"]
+  cf_acm_certificate_arn = "${aws_acm_certificate.media.arn}"
+
+  enable_s3_logs = true
 }
 
 resource "aws_s3_bucket" "media" {

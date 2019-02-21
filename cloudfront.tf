@@ -12,9 +12,9 @@ resource "aws_cloudfront_distribution" "distribution" {
     }
   }
 
-  enabled         = "${var.enabled}"
+  enabled         = "${var.cf_enabled}"
   comment         = "Created with Terraform"
-  is_ipv6_enabled = "${var.ipv6}"
+  is_ipv6_enabled = "${var.cf_ipv6}"
 
   logging_config {
     include_cookies = false
@@ -22,12 +22,12 @@ resource "aws_cloudfront_distribution" "distribution" {
     prefix          = "cloudfront"
   }
 
-  aliases = ["${var.aliases}"]
+  aliases = ["${var.cf_aliases}"]
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
-    compress         = "${var.compress}"
+    compress         = "${var.cf_compress}"
     target_origin_id = "Default"
 
     forwarded_values {
@@ -41,9 +41,9 @@ resource "aws_cloudfront_distribution" "distribution" {
     }
 
     viewer_protocol_policy = "https-only"
-    min_ttl                = "${var.min_ttl}"
-    default_ttl            = "${var.default_ttl}"
-    max_ttl                = "${var.max_ttl}"
+    min_ttl                = "${var.cf_min_ttl}"
+    default_ttl            = "${var.cf_default_ttl}"
+    max_ttl                = "${var.cf_max_ttl}"
   }
 
   restrictions {
@@ -52,43 +52,43 @@ resource "aws_cloudfront_distribution" "distribution" {
     }
   }
 
-  price_class = "${var.price_class}"
+  price_class = "${var.cf_price_class}"
 
   custom_error_response {
     error_code            = "404"
-    error_caching_min_ttl = "${var.404minttl}"
+    error_caching_min_ttl = "${var.cf_404_min_ttl}"
   }
 
   custom_error_response {
     error_code            = "500"
-    error_caching_min_ttl = "${var.500minttl}"
+    error_caching_min_ttl = "${var.cf_500_min_ttl}"
   }
 
   custom_error_response {
     error_code            = "501"
-    error_caching_min_ttl = "${var.501minttl}"
+    error_caching_min_ttl = "${var.cf_501_min_ttl}"
   }
 
   custom_error_response {
     error_code            = "502"
-    error_caching_min_ttl = "${var.502minttl}"
+    error_caching_min_ttl = "${var.cf_502_min_ttl}"
   }
 
   custom_error_response {
     error_code            = "503"
-    error_caching_min_ttl = "${var.503minttl}"
+    error_caching_min_ttl = "${var.cf_503_min_ttl}"
   }
 
   custom_error_response {
     error_code            = "504"
-    error_caching_min_ttl = "${var.504minttl}"
+    error_caching_min_ttl = "${var.cf_504_min_ttl}"
   }
 
   viewer_certificate {
-    acm_certificate_arn            = "${var.acm_certificate_arn}"
+    acm_certificate_arn            = "${var.cf_acm_certificate_arn}"
     cloudfront_default_certificate = false
     minimum_protocol_version       = "TLSv1.1_2016"
-    ssl_support_method             = "${var.ssl_support_method}"
+    ssl_support_method             = "${var.cf_ssl_support_method}"
   }
 
   web_acl_id = "${var.web_acl_id}"
