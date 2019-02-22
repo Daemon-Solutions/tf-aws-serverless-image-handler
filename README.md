@@ -81,7 +81,7 @@ More advanced options can be configured with additional variables. See below.
 | enable\_es\_logs | Enable sending Lambda logs to Elasticsearch via Firehose. | string | `"false"` | no |
 | enable\_s3\_logs | Enable sending Lambda CloudWatch logs to s3 via Firehose. | string | `"false"` | no |
 | es\_logs\_domain | Elasticsearch domain ARN to send CloudWatch logs to. | string | `""` | no |
-| es\_logs\_index\_name |  | string | `""` | no |
+| es\_logs\_index\_name | Elasticsearch index name for CloudWatch logs. | string | `""` | no |
 | es\_logs\_type\_name | Name of the log type sent to Elasticsearch from CloudWatch logs. | string | `""` | no |
 | log\_level | Lambda image handler log level. | string | `"INFO"` | no |
 | log\_retention | Log retention in days. | string | `"30"` | no |
