@@ -1,5 +1,57 @@
 # tf-aws-serverless-image-handler
-WIP
+
+This module provides a CloudFront distribution for image manipulation, such as resizing, quality reduction or feature detection and sources the images from an s3 bucket you provide.
+
+CloudFront logs are stored in s3, and optionally the Lambda function logs can be sent to s3 or Elasticsearch.
+
+This solution was adapted from https://github.com/awslabs/serverless-image-handler
+
+### Request path
+
+CloudFront -> API Gateway -> Lambda -> s3
+
+## Supported Filters
+
+| Filter Name |  Filter Syntax |
+|-------------|----------------|
+| Background color |  /filters:background_color(color)/ |
+| Blur |  /filters:blur(7)/ |
+| Brightness |  /filters:brightness(40)/ |
+| Color fill |  /filters:fill(color)/ |
+| Contrast |  /filters:contrast(40)/ |
+| Convolution |  /filters:convolution(1;2;1;2;4;2;1;2;1,3,false)/ |
+| Equalize |  /filters:equalize()/ |
+| Format |  /filters:format(jpeg)/ |
+| Grayscale |  /filters:grayscale()/ |
+| Image type (jpeg,png,webp,gif) |  /filters:format(jpeg)/ |
+| Max bytes |  /filters:max_bytes(40000)/ |
+| Noise |  /filters:noise(40)/ |
+| Quality |  /filters:quality(40)/ |
+| Resize |  /fit-in/800x1000/ |
+| RGB |  /filters:rgb(20,-20,40)/ |
+| Rotate |  /filters:rotate(90)/ |
+| Round Corner |  /filters:round_corner(20,255,255,255)/ |
+| Strip ICC |  /filters:strip_icc(10)/ |
+| Watermark |  /filters:watermark(https://) |
+| SmartCrop |  /smart |
+
+## Usage
+
+A simple usage:
+
+```
+module "serverless_image_handler" {
+  source = "../"
+
+  origin_bucket = "${aws_s3_bucket.media.id}"
+
+  cf_aliases             = ["media.trynotto.click"]
+  cf_acm_certificate_arn = "${aws_acm_certificate.media.arn}"
+
+  enable_s3_logs = true
+}
+```
+More advanced options can be configured with additional variables. See below.
 
 ## Inputs
 
@@ -46,5 +98,5 @@ WIP
 
 | Name | Description |
 |------|-------------|
-| cf\_domain\_name |  |
-| image\_handler\_bucket |  |
+| cf\_domain\_name | Domain name of the created CloudFront distribution. |
+| image\_handler\_bucket | Bucket created to store the Lambda function and logs. |
