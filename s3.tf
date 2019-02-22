@@ -14,7 +14,7 @@ resource "aws_s3_bucket" "bucket" {
 
 data "archive_file" "lambda" {
   type        = "zip"
-  source_dir  = "${path.module}/lambda/image"
+  source_dir  = "${path.module}/lambdas/image-handler"
   output_path = "${path.module}/files/serverless-image-handler.zip"
 }
 

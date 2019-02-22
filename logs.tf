@@ -97,7 +97,7 @@ data "archive_file" "log_processor" {
   count = "${var.enable_s3_logs || var.enable_es_logs ? 1 : 0}"
 
   type        = "zip"
-  source_file = "${path.module}/lambda/log-processor/lambda.py"
+  source_file = "${path.module}/lambdas/log-processor/lambda.py"
   output_path = "${path.module}/files/log-processor.zip"
 }
 

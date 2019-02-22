@@ -1,3 +1,4 @@
+# General
 variable "name" {
   default = "tf-aws-serverless-image-handler"
 }
@@ -9,9 +10,17 @@ variable "random_byte_length" {
 
 variable "origin_bucket" {}
 
-## Image Lambda
+# Image handler Lambda
+variable "auto_webp" {
+  default = "False"
+}
+
+variable "preserve_exif_info" {
+  default = "False"
+}
+
 variable "allow_unsafe_url" {
-  default = "true"
+  default = "True"
 }
 
 variable "cors_origin" {
@@ -24,6 +33,10 @@ variable "enable_cors" {
 
 variable "log_level" {
   default = "INFO"
+}
+
+variable "security_key" {
+  default = ""
 }
 
 variable "send_anonymous_data" {
@@ -50,7 +63,7 @@ variable "aws_endpoint" {
   }
 }
 
-## CloudFront
+# CloudFront
 variable "cf_acm_certificate_arn" {}
 
 variable "cf_aliases" {
@@ -118,7 +131,7 @@ variable "web_acl_id" {
   default = ""
 }
 
-## Logs
+# CloudWatch Logs
 variable "log_retention" {
   default = 30
 }
