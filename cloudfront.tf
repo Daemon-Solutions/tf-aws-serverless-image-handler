@@ -4,6 +4,11 @@ resource "aws_cloudfront_distribution" "distribution" {
     origin_id   = "Default"
     origin_path = "/image"
 
+    custom_header {
+      name  = "x-api-key"
+      value = "${aws_api_gateway_api_key.key.value}"
+    }
+
     custom_origin_config {
       http_port              = "80"
       https_port             = "443"

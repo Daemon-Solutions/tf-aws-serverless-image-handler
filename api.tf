@@ -11,10 +11,11 @@ resource "aws_api_gateway_resource" "proxy" {
 }
 
 resource "aws_api_gateway_method" "proxy" {
-  rest_api_id   = "${aws_api_gateway_rest_api.rest_api.id}"
-  resource_id   = "${aws_api_gateway_resource.proxy.id}"
-  http_method   = "ANY"
-  authorization = "NONE"
+  rest_api_id      = "${aws_api_gateway_rest_api.rest_api.id}"
+  resource_id      = "${aws_api_gateway_resource.proxy.id}"
+  http_method      = "ANY"
+  authorization    = "NONE"
+  api_key_required = true
 }
 
 resource "aws_api_gateway_integration" "lambda" {
@@ -43,6 +44,25 @@ resource "aws_api_gateway_deployment" "deployment" {
 
   rest_api_id = "${aws_api_gateway_rest_api.rest_api.id}"
   stage_name  = "image"
+}
+
+resource "aws_api_gateway_usage_plan" "usageplan" {
+  name = "${var.name}-${random_id.id.hex}"
+
+  api_stages {
+    api_id = "${aws_api_gateway_rest_api.rest_api.id}"
+    stage  = "${aws_api_gateway_deployment.deployment.stage_name}"
+  }
+}
+
+resource "aws_api_gateway_api_key" "key" {
+  name = "${var.name}-${random_id.id.hex}"
+}
+
+resource "aws_api_gateway_usage_plan_key" "key" {
+  key_id        = "${aws_api_gateway_api_key.key.id}"
+  key_type      = "API_KEY"
+  usage_plan_id = "${aws_api_gateway_usage_plan.usageplan.id}"
 }
 
 resource "aws_lambda_permission" "apigw" {

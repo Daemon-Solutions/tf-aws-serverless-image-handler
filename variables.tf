@@ -1,6 +1,7 @@
 # General
 variable "name" {
-  default = "tf-aws-serverless-image-handler"
+  description = "Custom name for created resources."
+  default     = "tf-aws-serverless-image-handler"
 }
 
 variable "random_byte_length" {
@@ -8,42 +9,54 @@ variable "random_byte_length" {
   default     = 4
 }
 
-variable "origin_bucket" {}
+variable "origin_bucket" {
+  description = "Bucket where the source images reside."
+}
 
 # Image handler Lambda
 variable "auto_webp" {
-  default = "False"
+  description = "Automatically return Webp format images based on the client Accept header."
+  default     = "False"
 }
 
 variable "preserve_exif_info" {
-  default = "False"
+  description = "Preserves exif information in generated images. Increases image size."
+  default     = "False"
 }
 
 variable "allow_unsafe_url" {
-  default = "True"
+  description = "Allow unencrypted URL's."
+  default     = "True"
 }
 
 variable "cors_origin" {
-  default = "*"
+  description = "Value returned by the API in the Access-Control-Allow-Origin header. A star (*) value will support any origin."
+  default     = "*"
 }
 
 variable "enable_cors" {
-  default = "No"
+  description = "Enable API Cross-Origin Resource Sharing (CORS) support."
+  default     = "No"
 }
 
 variable "log_level" {
-  default = "INFO"
+  description = "Lambda image handler log level."
+  default     = "INFO"
 }
 
 variable "security_key" {
-  default = ""
+  description = "Key to use to generate safe URL's."
+  default     = ""
 }
 
 variable "send_anonymous_data" {
-  default = "No"
+  description = "Send anonymous usage data to Amazon."
+  default     = "No"
 }
 
 variable "aws_endpoint" {
+  description = "AWS s3 endpoint per region."
+
   default = {
     us-east-1      = "https://s3.amazonaws.com"
     us-east-2      = "https://s3.us-east-2.amazonaws.com"
@@ -64,98 +77,122 @@ variable "aws_endpoint" {
 }
 
 # CloudFront
-variable "cf_acm_certificate_arn" {}
+variable "cf_acm_certificate_arn" {
+  description = "ACM certificate to use with the created CloudFront distribution."
+}
 
 variable "cf_aliases" {
-  type = "list"
+  description = "Aliases for the CloudFront distribution."
+  type        = "list"
 }
 
 variable "cf_enabled" {
-  default = "true"
+  description = "State of the CloudFront distribution."
+  default     = "true"
 }
 
 variable "cf_compress" {
-  default = "false"
+  description = "Enable automatic response compression."
+  default     = "false"
 }
 
 variable "cf_min_ttl" {
-  default = "0"
+  description = "Minimum TTL in seconds."
+  default     = "0"
 }
 
 variable "cf_default_ttl" {
-  default = "86400"
+  description = "Default TTL in seconds."
+  default     = "86400"
 }
 
 variable "cf_max_ttl" {
-  default = "31536000"
+  description = "Maximum TTL in seconds."
+  default     = "31536000"
 }
 
 variable "cf_price_class" {
-  default = "PriceClass_All"
+  description = "Price class of the CloudFront distribution."
+  default     = "PriceClass_All"
 }
 
 variable "cf_404_min_ttl" {
-  default = "60"
+  description = "Minumum TTL of 404 responses."
+  default     = "60"
 }
 
 variable "cf_500_min_ttl" {
-  default = "0"
+  description = "Minumum TTL of 500 responses."
+  default     = "0"
 }
 
 variable "cf_501_min_ttl" {
-  default = "0"
+  description = "Minumum TTL of 501 responses."
+  default     = "0"
 }
 
 variable "cf_502_min_ttl" {
-  default = "0"
+  description = "Minumum TTL of 502 responses."
+  default     = "0"
 }
 
 variable "cf_503_min_ttl" {
-  default = "0"
+  description = "Minumum TTL of 503 responses."
+  default     = "0"
 }
 
 variable "cf_504_min_ttl" {
-  default = "0"
+  description = "Minumum TTL of 504 responses."
+  default     = "0"
 }
 
 variable "cf_ssl_support_method" {
-  default = "sni-only"
+  description = "Method by which CloudFront serves HTTPS requests."
+  default     = "sni-only"
 }
 
 variable "cf_ipv6" {
-  type    = "string"
-  default = "true"
+  description = "Enable IPv6 on the CloudFront distribution."
+  default     = "true"
 }
 
 variable "web_acl_id" {
-  default = ""
+  description = "WAF ACL to use with the CloudFront distribution."
+  default     = ""
 }
 
 # CloudWatch Logs
 variable "log_retention" {
-  default = 30
+  description = "Log retention in days."
+  default     = 30
 }
 
 variable "logs_filter_pattern" {
-  default = "?\"[INFO]\" ?\"[WARNING]\" ?\"[ERROR]\""
+  description = "Metric filter to filter logs sent from CloudWatch to s3 or Elasticsearch."
+  default     = "?\"[INFO]\" ?\"[WARNING]\" ?\"[ERROR]\""
 }
 
 variable "enable_s3_logs" {
-  default = false
+  description = "Enable sending Lambda CloudWatch logs to s3 via Firehose."
+  default     = false
 }
 
 variable "enable_es_logs" {
-  default = false
+  description = "Enable sending Lambda logs to Elasticsearch via Firehose."
+  default     = false
 }
 
 variable "es_logs_domain" {
-  default = ""
+  description = "Elasticsearch domain ARN to send CloudWatch logs to."
+  default     = ""
 }
 
 variable "es_logs_index_name" {
-  default = ""
+  desciption = "Elasticsearch index name for CloudWatch logs."
+  default    = ""
 }
 
 variable "es_logs_type_name" {
-  default = ""
+  description = "Name of the log type sent to Elasticsearch from CloudWatch logs."
+  default     = ""
 }
