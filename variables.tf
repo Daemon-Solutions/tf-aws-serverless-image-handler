@@ -188,8 +188,8 @@ variable "es_logs_domain" {
 }
 
 variable "es_logs_index_name" {
-  desciption = "Elasticsearch index name for CloudWatch logs."
-  default    = ""
+  description = "Elasticsearch index name for CloudWatch logs."
+  default     = ""
 }
 
 variable "es_logs_type_name" {

@@ -6,6 +6,8 @@ CloudFront logs are stored in s3, and optionally the Lambda function logs can be
 
 This solution was adapted from https://github.com/awslabs/serverless-image-handler
 
+See https://github.com/thumbor/thumbor/wiki/security for generating safe URL's used to prevent DoS attacks. A simple Python script can be found in `tests/python/safe_url.py` for demonstration purposes.
+
 ### Request path
 
 CloudFront -> API Gateway -> Lambda -> s3
@@ -37,7 +39,7 @@ CloudFront -> API Gateway -> Lambda -> s3
 
 ## Usage
 
-A simple usage:
+A simple usage example:
 
 ```
 module "serverless_image_handler" {
@@ -49,8 +51,15 @@ module "serverless_image_handler" {
   cf_acm_certificate_arn = "${aws_acm_certificate.media.arn}"
 
   enable_s3_logs = true
+
+  allow_unsafe_url = "False"
+  security_key     = "testing"
 }
 ```
+An image called `face.jpg` resized to `200x200` and smart cropped can then be accessed via the safe URL:
+
+`https://media.trynotto.click/IiQkNqQ9I8T-Jh-NLZk8F4Kwkyg=/200x200/smart/face.jpg`
+
 More advanced options can be configured with additional variables. See below.
 
 ## Inputs

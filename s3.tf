@@ -19,12 +19,8 @@ data "archive_file" "lambda" {
 }
 
 resource "aws_s3_bucket_object" "lambda" {
-  depends_on = [
-    "data.archive_file.lambda",
-  ]
-
   bucket = "${aws_s3_bucket.bucket.id}"
   key    = "serverless-image-handler.zip"
   source = "${path.module}/files/serverless-image-handler.zip"
-  etag   = "${md5(file("${path.module}/files/serverless-image-handler.zip"))}"
+  etag   = "${md5(file("${data.archive_file.lambda.output_path}"))}"
 }

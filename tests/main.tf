@@ -7,10 +7,13 @@ module "serverless_image_handler" {
   cf_acm_certificate_arn = "${aws_acm_certificate.media.arn}"
 
   enable_s3_logs = true
+
+  allow_unsafe_url = "False"
+  security_key     = "testing"
 }
 
 resource "aws_s3_bucket" "media" {
-  bucket = "tf-aws-serverless-image-handler-media"
+  bucket = "tf-aws-serverless-image-handler-media-${random_id.id.hex}"
   acl    = "private"
 
   server_side_encryption_configuration {
@@ -20,4 +23,11 @@ resource "aws_s3_bucket" "media" {
       }
     }
   }
+}
+
+resource "aws_s3_bucket_object" "image" {
+  bucket = "${aws_s3_bucket.media.id}"
+  key    = "face.jpg"
+  source = "images/face.jpg"
+  etag   = "${md5(file("images/face.jpg"))}"
 }

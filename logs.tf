@@ -104,12 +104,8 @@ data "archive_file" "log_processor" {
 resource "aws_lambda_function" "log_processor" {
   count = "${var.enable_s3_logs || var.enable_es_logs ? 1 : 0}"
 
-  depends_on = [
-    "data.archive_file.log_processor",
-  ]
-
   filename         = "${path.module}/files/log-processor.zip"
-  source_code_hash = "${base64sha256(file("${path.module}/files/log-processor.zip"))}"
+  source_code_hash = "${base64sha256(file("${data.archive_file.log_processor.output_path}"))}"
   function_name    = "${var.name}-log-processor-${random_id.id.hex}"
   description      = "An Amazon Kinesis Firehose stream processor that extracts individual log events from records sent by Cloudwatch Logs subscription filters."
   role             = "${aws_iam_role.log_processor.arn}"

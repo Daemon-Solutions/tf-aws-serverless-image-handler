@@ -254,8 +254,8 @@ data "aws_iam_policy_document" "firehose_log_processor" {
   }
 }
 
-data "aws_iam_policy_document" "firehose_kinesis" {
-  count = "${var.enable_s3_logs || var.enable_es_logs ? 1 : 0}"
+data "aws_iam_policy_document" "firehose_kinesis_s3" {
+  count = "${var.enable_s3_logs ? 1 : 0}"
 
   statement {
     effect = "Allow"
@@ -268,6 +268,24 @@ data "aws_iam_policy_document" "firehose_kinesis" {
 
     resources = [
       "${aws_kinesis_firehose_delivery_stream.s3_stream.arn}",
+    ]
+  }
+}
+
+data "aws_iam_policy_document" "firehose_kinesis_es" {
+  count = "${var.enable_es_logs ? 1 : 0}"
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "kinesis:DescribeStream",
+      "kinesis:GetShardIterator",
+      "kinesis:GetRecords",
+    ]
+
+    resources = [
+      "${aws_kinesis_firehose_delivery_stream.es_stream.arn}",
     ]
   }
 }
@@ -342,12 +360,20 @@ resource "aws_iam_role_policy" "firehose_log_processor" {
   policy = "${data.aws_iam_policy_document.firehose_log_processor.json}"
 }
 
-resource "aws_iam_role_policy" "firehose_kinesis" {
-  count = "${var.enable_s3_logs || var.enable_es_logs ? 1 : 0}"
+resource "aws_iam_role_policy" "firehose_kinesis_s3" {
+  count = "${var.enable_s3_logs ? 1 : 0}"
 
-  name   = "${var.name}-firehose-kinesis-${random_id.id.hex}"
+  name   = "${var.name}-firehose-kinesis-s3-${random_id.id.hex}"
   role   = "${aws_iam_role.firehose.name}"
-  policy = "${data.aws_iam_policy_document.firehose_kinesis.json}"
+  policy = "${data.aws_iam_policy_document.firehose_kinesis_s3.json}"
+}
+
+resource "aws_iam_role_policy" "firehose_kinesis_es" {
+  count = "${var.enable_es_logs ? 1 : 0}"
+
+  name   = "${var.name}-firehose-kinesis-es-${random_id.id.hex}"
+  role   = "${aws_iam_role.firehose.name}"
+  policy = "${data.aws_iam_policy_document.firehose_kinesis_es.json}"
 }
 
 resource "aws_iam_role_policy" "firehose_s3" {
