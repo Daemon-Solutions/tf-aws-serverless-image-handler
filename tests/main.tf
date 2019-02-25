@@ -2,6 +2,7 @@ module "serverless_image_handler" {
   source = "../"
 
   origin_bucket = "${aws_s3_bucket.media.id}"
+  log_bucket    = "${aws_s3_bucket.logs.id}"
 
   cf_aliases             = ["media.trynotto.click"]
   cf_acm_certificate_arn = "${aws_acm_certificate.media.arn}"
@@ -30,4 +31,17 @@ resource "aws_s3_bucket_object" "image" {
   key    = "face.jpg"
   source = "images/face.jpg"
   etag   = "${md5(file("images/face.jpg"))}"
+}
+
+resource "aws_s3_bucket" "logs" {
+  bucket = "tf-aws-serverless-image-handler-logs-${random_id.id.hex}"
+  acl    = "private"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
 }

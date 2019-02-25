@@ -23,8 +23,8 @@ resource "aws_cloudfront_distribution" "distribution" {
 
   logging_config {
     include_cookies = false
-    bucket          = "${aws_s3_bucket.bucket.id}.s3.amazonaws.com"
-    prefix          = "cloudfront"
+    bucket          = "${var.log_bucket}.s3.amazonaws.com"
+    prefix          = "${var.cf_log_prefix}"
   }
 
   aliases = ["${var.cf_aliases}"]

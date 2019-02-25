@@ -13,6 +13,10 @@ variable "origin_bucket" {
   description = "Bucket where the source images reside."
 }
 
+variable "log_bucket" {
+  description = "Bucket where to store logs."
+}
+
 # Image handler Lambda
 variable "auto_webp" {
   description = "Automatically return Webp format images based on the client Accept header."
@@ -106,6 +110,11 @@ variable "cf_default_ttl" {
   default     = "86400"
 }
 
+variable "cf_log_prefix" {
+  description = "CloudFront log prefix."
+  default     = "cloudfront/"
+}
+
 variable "cf_max_ttl" {
   description = "Maximum TTL in seconds."
   default     = "31536000"
@@ -162,6 +171,11 @@ variable "web_acl_id" {
 }
 
 # CloudWatch Logs
+variable "cw_log_prefix" {
+  description = "CloudWatch log prefix."
+  default     = "cloudwatch/"
+}
+
 variable "log_retention" {
   description = "Log retention in days."
   default     = 30

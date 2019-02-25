@@ -48,8 +48,8 @@ resource "aws_kinesis_firehose_delivery_stream" "s3_stream" {
 
   extended_s3_configuration {
     role_arn   = "${aws_iam_role.firehose.arn}"
-    bucket_arn = "${aws_s3_bucket.bucket.arn}"
-    prefix     = "cloudwatch/"
+    bucket_arn = "arn:aws:s3:::${var.log_bucket}"
+    prefix     = "${var.cw_log_prefix}"
 
     processing_configuration {
       enabled = "true"
@@ -74,8 +74,8 @@ resource "aws_kinesis_firehose_delivery_stream" "es_stream" {
 
   s3_configuration {
     role_arn   = "${aws_iam_role.firehose.arn}"
-    bucket_arn = "${aws_s3_bucket.bucket.arn}"
-    prefix     = "cloudwatch/"
+    bucket_arn = "arn:aws:s3:::${var.log_bucket}"
+    prefix     = "${var.cw_log_prefix}"
   }
 
   elasticsearch_configuration {

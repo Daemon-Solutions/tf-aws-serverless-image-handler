@@ -306,8 +306,8 @@ data "aws_iam_policy_document" "firehose_s3" {
     ]
 
     resources = [
-      "arn:aws:s3:::${aws_s3_bucket.bucket.id}/*",
-      "arn:aws:s3:::${aws_s3_bucket.bucket.id}",
+      "arn:aws:s3:::${var.log_bucket}/*",
+      "arn:aws:s3:::${var.log_bucket}",
     ]
   }
 }
@@ -390,25 +390,4 @@ resource "aws_iam_role_policy" "firehose_es" {
   name   = "${var.name}-firehose-es-${random_id.id.hex}"
   role   = "${aws_iam_role.firehose.name}"
   policy = "${data.aws_iam_policy_document.firehose_es.json}"
-}
-
-# Allow CloudFront access to bucket for logging
-data "aws_iam_policy_document" "cloudfront" {
-  statement {
-    sid = "AWSCloudFrontLogging"
-
-    actions = [
-      "s3:GetBucketAcl",
-      "s3:PutBucketAcl",
-    ]
-
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
-    }
-
-    resources = [
-      "arn:aws:s3:::${var.name}-${random_id.id.hex}",
-    ]
-  }
 }
