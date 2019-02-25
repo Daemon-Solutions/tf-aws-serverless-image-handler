@@ -72,6 +72,12 @@ resource "aws_kinesis_firehose_delivery_stream" "es_stream" {
   name        = "${var.name}-es-${random_id.id.hex}"
   destination = "elasticsearch"
 
+  s3_configuration {
+    role_arn   = "${aws_iam_role.firehose.arn}"
+    bucket_arn = "${aws_s3_bucket.bucket.arn}"
+    prefix     = "cloudwatch/"
+  }
+
   elasticsearch_configuration {
     domain_arn = "${var.es_logs_domain}"
     role_arn   = "${aws_iam_role.firehose.arn}"
