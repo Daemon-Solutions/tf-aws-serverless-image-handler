@@ -2,7 +2,7 @@
 
 This module provides a CloudFront distribution for image manipulation, such as resizing, quality reduction or feature detection and sources the images from an s3 bucket you provide.
 
-CloudFront logs are stored in s3, and optionally the Lambda function logs can be sent to s3 or Elasticsearch.
+CloudFront logs are stored in a provided s3 bucket, and optionally the Lambda function logs can be sent to s3 or Elasticsearch.
 
 This solution was adapted from https://github.com/awslabs/serverless-image-handler
 
@@ -46,6 +46,7 @@ module "serverless_image_handler" {
   source = "../"
 
   origin_bucket = "${aws_s3_bucket.media.id}"
+  log_bucket    = "${aws_s3_bucket.logs.id}"
 
   cf_aliases             = ["media.trynotto.click"]
   cf_acm_certificate_arn = "${aws_acm_certificate.media.arn}"
@@ -56,6 +57,7 @@ module "serverless_image_handler" {
   security_key     = "testing"
 }
 ```
+
 An image called `face.jpg` resized to `200x200` and smart cropped can then be accessed via the safe URL:
 
 `https://media.trynotto.click/IiQkNqQ9I8T-Jh-NLZk8F4Kwkyg=/200x200/smart/face.jpg`
@@ -81,17 +83,20 @@ More advanced options can be configured with additional variables. See below.
 | cf\_default\_ttl | Default TTL in seconds. | string | `"86400"` | no |
 | cf\_enabled | State of the CloudFront distribution. | string | `"true"` | no |
 | cf\_ipv6 | Enable IPv6 on the CloudFront distribution. | string | `"true"` | no |
+| cf\_log\_prefix | CloudFront log prefix. | string | `"cloudfront/"` | no |
 | cf\_max\_ttl | Maximum TTL in seconds. | string | `"31536000"` | no |
 | cf\_min\_ttl | Minimum TTL in seconds. | string | `"0"` | no |
 | cf\_price\_class | Price class of the CloudFront distribution. | string | `"PriceClass_All"` | no |
 | cf\_ssl\_support\_method | Method by which CloudFront serves HTTPS requests. | string | `"sni-only"` | no |
 | cors\_origin | Value returned by the API in the Access-Control-Allow-Origin header. A star (*) value will support any origin. | string | `"*"` | no |
+| cw\_log\_prefix | CloudWatch log prefix. | string | `"cloudwatch/"` | no |
 | enable\_cors | Enable API Cross-Origin Resource Sharing (CORS) support. | string | `"No"` | no |
 | enable\_es\_logs | Enable sending Lambda logs to Elasticsearch via Firehose. | string | `"false"` | no |
 | enable\_s3\_logs | Enable sending Lambda CloudWatch logs to s3 via Firehose. | string | `"false"` | no |
 | es\_logs\_domain | Elasticsearch domain ARN to send CloudWatch logs to. | string | `""` | no |
 | es\_logs\_index\_name | Elasticsearch index name for CloudWatch logs. | string | `""` | no |
 | es\_logs\_type\_name | Name of the log type sent to Elasticsearch from CloudWatch logs. | string | `""` | no |
+| log\_bucket | Bucket where to store logs. | string | n/a | yes |
 | log\_level | Lambda image handler log level. | string | `"INFO"` | no |
 | log\_retention | Log retention in days. | string | `"30"` | no |
 | logs\_filter\_pattern | Metric filter to filter logs sent from CloudWatch to s3 or Elasticsearch. | string | `"?\"[INFO]\" ?\"[WARNING]\" ?\"[ERROR]\""` | no |
@@ -108,4 +113,6 @@ More advanced options can be configured with additional variables. See below.
 | Name | Description |
 |------|-------------|
 | cf\_domain\_name | Domain name of the created CloudFront distribution. |
-| image\_handler\_bucket | Bucket created to store the Lambda function and logs. |
+| image\_handler\_bucket | Bucket created to store the Lambda function. |
+| image\_handler\_log\_group | CloudWatch log group for the image handler. |
+| log\_processor\_log\_group | CloudWatch log group for the log processor. |

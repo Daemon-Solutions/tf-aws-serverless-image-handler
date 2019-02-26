@@ -20,6 +20,6 @@ data "archive_file" "lambda" {
 resource "aws_s3_bucket_object" "lambda" {
   bucket = "${aws_s3_bucket.bucket.id}"
   key    = "serverless-image-handler.zip"
-  source = "${path.module}/files/serverless-image-handler.zip"
+  source = "${data.archive_file.lambda.output_path}"
   etag   = "${md5(file("${data.archive_file.lambda.output_path}"))}"
 }
