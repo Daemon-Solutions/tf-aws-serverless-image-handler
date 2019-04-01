@@ -18,7 +18,7 @@ vows/storage_vows.py,sha256=czLoskWeqhASwW6uYqraQvxtZzma2Bw8AJwvyKIoxRM,14276
 vows/fixtures/__init__.py,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
 vows/fixtures/storage_fixture.py,sha256=LDNxE558uHp5mD3Pd_HT1Ov3GjM387CgdxQHVn86HWI,1070
 tc_aws-6.2.10.dist-info/METADATA,sha256=zCHRH9_kXAaUg1IPvb0bx2ucQRy-ISQitUTcQxs7tu8,6592
-tc_aws-6.2.10.dist-info/WHEEL,sha256=-J0fjkbRGEJHm-BQGjzdMhZ5vCtm0jNtN8HEGGAlhZw,93
+tc_aws-6.2.10.dist-info/WHEEL,sha256=wy6I0RkXf1SHQI9WgMGMZtkrPqc-c49UWrTH1_nKFnQ,93
 tc_aws-6.2.10.dist-info/top_level.txt,sha256=G4YCkeDXNLZeOqIQeAmiNE0HxdHKFY3sU-uGt2mKxu0,12
 tc_aws-6.2.10.dist-info/RECORD,,
 tc_aws-6.2.10.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4

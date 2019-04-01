@@ -8,9 +8,9 @@ License: ASL
 Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 2.7
 Requires-Dist: botocore (==1.8.0)
-Requires-Dist: tornado (==5.0.1)
+Requires-Dist: tornado (==5.1.1)
 Requires-Dist: pycurl (==7.43.0.1)
-Requires-Dist: tornado-botocore (==1.3.0)
+Requires-Dist: tornado-botocore (==1.5.0)
 Requires-Dist: requests-unixsocket (==0.1.5)
 Requires-Dist: thumbor (==6.5.1)
 Requires-Dist: thumbor-plugins (==0.2.0)
