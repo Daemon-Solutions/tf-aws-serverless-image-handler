@@ -104,6 +104,7 @@ More advanced options can be configured with additional variables. See below.
 | origin\_bucket | Bucket where the source images reside. | string | n/a | yes |
 | preserve\_exif\_info | Preserves exif information in generated images. Increases image size. | string | `"False"` | no |
 | random\_byte\_length | The byte length of the random id generator used for unique resource names. | string | `"4"` | no |
+| s3\_cache\_expiry | Number of days in which the cached images will expire in s3. | string | `"365"` | no |
 | security\_key | Key to use to generate safe URL's. | string | `""` | no |
 | send\_anonymous\_data | Send anonymous usage data to Amazon. | string | `"No"` | no |
 | web\_acl\_id | WAF ACL to use with the CloudFront distribution. | string | `""` | no |

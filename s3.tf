@@ -11,6 +11,28 @@ resource "aws_s3_bucket" "bucket" {
   }
 }
 
+resource "aws_s3_bucket" "cache" {
+  bucket = "${var.name}-cache-${random_id.id.hex}"
+  acl    = "private"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+
+  lifecycle_rule {
+    id      = "cache_expiry"
+    enabled = true
+
+    expiration {
+      days = "${var.s3_cache_expiry}"
+    }
+  }
+}
+
 data "archive_file" "lambda" {
   type        = "zip"
   source_dir  = "${path.module}/lambdas/image-handler"

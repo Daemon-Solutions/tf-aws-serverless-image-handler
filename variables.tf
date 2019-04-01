@@ -17,6 +17,11 @@ variable "log_bucket" {
   description = "Bucket where to store logs."
 }
 
+variable "s3_cache_expiry" {
+  description = "Number of days in which the cached images will expire in s3."
+  default     = "365"
+}
+
 # Image handler Lambda
 variable "auto_webp" {
   description = "Automatically return Webp format images based on the client Accept header."
