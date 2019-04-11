@@ -100,12 +100,15 @@ More advanced options can be configured with additional variables. See below.
 | log\_level | Lambda image handler log level. | string | `"INFO"` | no |
 | log\_retention | Log retention in days. | string | `"30"` | no |
 | logs\_filter\_pattern | Metric filter to filter logs sent from CloudWatch to s3 or Elasticsearch. | string | `"?\"[INFO]\" ?\"[WARNING]\" ?\"[ERROR]\""` | no |
+| memory\_size | Memory to assign to the image Lambda function. | string | `"1536"` | no |
 | name | Custom name for created resources. | string | `"tf-aws-serverless-image-handler"` | no |
 | origin\_bucket | Bucket where the source images reside. | string | n/a | yes |
 | preserve\_exif\_info | Preserves exif information in generated images. Increases image size. | string | `"False"` | no |
 | random\_byte\_length | The byte length of the random id generator used for unique resource names. | string | `"4"` | no |
+| s3\_cache\_expiry | Number of days in which the cached images will expire in s3. | string | `"365"` | no |
 | security\_key | Key to use to generate safe URL's. | string | `""` | no |
 | send\_anonymous\_data | Send anonymous usage data to Amazon. | string | `"No"` | no |
+| timeout | Timeout in seconds of the image Lambda function. | string | `"20"` | no |
 | web\_acl\_id | WAF ACL to use with the CloudFront distribution. | string | `""` | no |
 
 ## Outputs

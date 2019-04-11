@@ -17,6 +17,11 @@ variable "log_bucket" {
   description = "Bucket where to store logs."
 }
 
+variable "s3_cache_expiry" {
+  description = "Number of days in which the cached images will expire in s3."
+  default     = "365"
+}
+
 # Image handler Lambda
 variable "auto_webp" {
   description = "Automatically return Webp format images based on the client Accept header."
@@ -48,6 +53,11 @@ variable "log_level" {
   default     = "INFO"
 }
 
+variable "memory_size" {
+  description = "Memory to assign to the image Lambda function."
+  default     = "1536"
+}
+
 variable "security_key" {
   description = "Key to use to generate safe URL's."
   default     = ""
@@ -56,6 +66,11 @@ variable "security_key" {
 variable "send_anonymous_data" {
   description = "Send anonymous usage data to Amazon."
   default     = "No"
+}
+
+variable "timeout" {
+  description = "Timeout in seconds of the image Lambda function."
+  default     = "20"
 }
 
 variable "aws_endpoint" {

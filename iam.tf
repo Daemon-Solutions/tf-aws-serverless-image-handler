@@ -69,6 +69,19 @@ data "aws_iam_policy_document" "s3" {
       "arn:aws:s3:::${var.origin_bucket}",
     ]
   }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+    ]
+
+    resources = [
+      "${aws_s3_bucket.cache.arn}/*",
+    ]
+  }
 }
 
 resource "aws_iam_role_policy" "logs" {

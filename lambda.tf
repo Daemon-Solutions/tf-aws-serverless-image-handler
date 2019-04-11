@@ -11,25 +11,26 @@ resource "aws_lambda_function" "lambda" {
   role             = "${aws_iam_role.lambda.arn}"
   handler          = "image_handler/lambda_function.lambda_handler"
   runtime          = "python2.7"
-  timeout          = "20"
-  memory_size      = "1536"
+  timeout          = "${var.timeout}"
+  memory_size      = "${var.memory_size}"
 
   environment {
     variables = {
       AUTO_WEBP          = "${var.auto_webp}"
       PRESERVE_EXIF_INFO = "${var.preserve_exif_info}"
 
-      ALLOW_UNSAFE_URL     = "${var.allow_unsafe_url}"
-      CORS_ORIGIN          = "${var.cors_origin}"
-      ENABLE_CORS          = "${var.enable_cors}"
-      LOG_LEVEL            = "${var.log_level}"
-      REKOGNITION_REGION   = "${data.aws_region.current.name}"
-      SECURITY_KEY         = "${var.security_key}"
-      SEND_ANONYMOUS_DATA  = "${var.send_anonymous_data}"
-      TC_AWS_ENDPOINT      = "${var.aws_endpoint[data.aws_region.current.name]}"
-      TC_AWS_LOADER_BUCKET = "${var.origin_bucket}"
-      TC_AWS_REGION        = "${data.aws_region.current.name}"
-      UUID                 = "${random_uuid.lambda.result}"
+      ALLOW_UNSAFE_URL             = "${var.allow_unsafe_url}"
+      CORS_ORIGIN                  = "${var.cors_origin}"
+      ENABLE_CORS                  = "${var.enable_cors}"
+      LOG_LEVEL                    = "${var.log_level}"
+      REKOGNITION_REGION           = "${data.aws_region.current.name}"
+      SECURITY_KEY                 = "${var.security_key}"
+      SEND_ANONYMOUS_DATA          = "${var.send_anonymous_data}"
+      TC_AWS_ENDPOINT              = "${var.aws_endpoint[data.aws_region.current.name]}"
+      TC_AWS_LOADER_BUCKET         = "${var.origin_bucket}"
+      TC_AWS_REGION                = "${data.aws_region.current.name}"
+      TC_AWS_RESULT_STORAGE_BUCKET = "${aws_s3_bucket.cache.id}"
+      UUID                         = "${random_uuid.lambda.result}"
     }
   }
 }

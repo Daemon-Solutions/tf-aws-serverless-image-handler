@@ -8,7 +8,7 @@ thumbor_plugins/optimizers/optipng.py,sha256=NBvmkO7F1LrduMpLw6eKsz4a7RNHaBehKYS
 thumbor_plugins/optimizers/pngcrush.py,sha256=HbSvT0UH4MlSagdMoFvYMXZiSV30XMeT5rISTOxee14,1146
 thumbor_plugins/optimizers/pngquant.py,sha256=nL4tvYSzNFiMYM-Uo0s2I7S2hkeKVNgtNT1D9JyojJc,1448
 thumbor_plugins-0.2.0.dist-info/METADATA,sha256=hSG-514WoZZsRNHE09ABH-7rPJ7XzUFIVEP17dJ9Tps,1095
-thumbor_plugins-0.2.0.dist-info/WHEEL,sha256=-J0fjkbRGEJHm-BQGjzdMhZ5vCtm0jNtN8HEGGAlhZw,93
+thumbor_plugins-0.2.0.dist-info/WHEEL,sha256=wy6I0RkXf1SHQI9WgMGMZtkrPqc-c49UWrTH1_nKFnQ,93
 thumbor_plugins-0.2.0.dist-info/top_level.txt,sha256=ZEGICU2TxMFcSh4m3K_iSH08aBXskrNO20Mqk2ngbeU,16
 thumbor_plugins-0.2.0.dist-info/RECORD,,
 thumbor_plugins-0.2.0.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4

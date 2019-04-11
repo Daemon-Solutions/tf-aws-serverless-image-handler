@@ -38,6 +38,20 @@ class BaseAsyncIOLoop(IOLoop):
         self.readers = set()
         self.writers = set()
         self.closing = False
+        # If an asyncio loop was closed through an asyncio interface
+        # instead of IOLoop.close(), we'd never hear about it and may
+        # have left a dangling reference in our map. In case an
+        # application (or, more likely, a test suite) creates and
+        # destroys a lot of event loops in this way, check here to
+        # ensure that we don't have a lot of dead loops building up in
+        # the map.
+        #
+        # TODO(bdarnell): consider making self.asyncio_loop a weakref
+        # for AsyncIOMainLoop and make _ioloop_for_asyncio a
+        # WeakKeyDictionary.
+        for loop in list(IOLoop._ioloop_for_asyncio):
+            if loop.is_closed():
+                del IOLoop._ioloop_for_asyncio[loop]
         IOLoop._ioloop_for_asyncio[asyncio_loop] = self
         super(BaseAsyncIOLoop, self).initialize(**kwargs)
 
@@ -48,6 +62,12 @@ class BaseAsyncIOLoop(IOLoop):
             self.remove_handler(fd)
             if all_fds:
                 self.close_fd(fileobj)
+        # Remove the mapping before closing the asyncio loop. If this
+        # happened in the other order, we could race against another
+        # initialize() call which would see the closed asyncio loop,
+        # assume it was closed from the asyncio side, and do this
+        # cleanup for us, leading to a KeyError.
+        del IOLoop._ioloop_for_asyncio[self.asyncio_loop]
         self.asyncio_loop.close()
 
     def add_handler(self, fd, handler, events):
