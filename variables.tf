@@ -53,6 +53,11 @@ variable "log_level" {
   default     = "INFO"
 }
 
+variable "memory_size" {
+  description = "Memory to assign to the image Lambda function."
+  default     = "1536"
+}
+
 variable "security_key" {
   description = "Key to use to generate safe URL's."
   default     = ""
@@ -61,6 +66,11 @@ variable "security_key" {
 variable "send_anonymous_data" {
   description = "Send anonymous usage data to Amazon."
   default     = "No"
+}
+
+variable "timeout" {
+  description = "Timeout in seconds of the image Lambda function."
+  default     = "20"
 }
 
 variable "aws_endpoint" {

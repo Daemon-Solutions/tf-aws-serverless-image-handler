@@ -11,8 +11,8 @@ resource "aws_lambda_function" "lambda" {
   role             = "${aws_iam_role.lambda.arn}"
   handler          = "image_handler/lambda_function.lambda_handler"
   runtime          = "python2.7"
-  timeout          = "20"
-  memory_size      = "1536"
+  timeout          = "${var.timeout}"
+  memory_size      = "${var.memory_size}"
 
   environment {
     variables = {
