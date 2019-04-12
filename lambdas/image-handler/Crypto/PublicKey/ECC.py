@@ -30,6 +30,8 @@
 
 from __future__ import print_function
 
+import re
+import sys
 import struct
 import binascii
 from collections import namedtuple
@@ -49,7 +51,7 @@ from Crypto.PublicKey import (_expand_subject_public_key_info,
 
 from Crypto.Util._raw_api import (load_pycryptodome_raw_lib, VoidPointer,
                                   SmartPointer, c_size_t, c_uint8_ptr,
-                                  c_ulonglong, c_uint)
+                                  c_ulonglong)
 
 from Crypto.Random.random import getrandbits
 
@@ -92,6 +94,8 @@ _curves = {}
 
 
 p256_names = ["p256", "NIST P-256", "P-256", "prime256v1", "secp256r1"]
+
+
 def init_p256():
     p = 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff
     b = 0x5ac635d8aa3a93e7b3ebbd55769886bc651d06b0cc53b0f63bce3c3e27d2604b
@@ -126,6 +130,7 @@ def init_p256():
                   context,
                   "NIST P-256",
                   "ecdsa-sha2-nistp256")
+    global p256_names
     _curves.update(dict.fromkeys(p256_names, p256))
 
 
@@ -134,6 +139,8 @@ del init_p256
 
 
 p384_names = ["p384", "NIST P-384", "P-384", "prime384v1", "secp384r1"]
+
+
 def init_p384():
     p = 0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffeffffffff0000000000000000ffffffff
     b = 0xb3312fa7e23ee7e4988e056be3f82d19181d9c6efe8141120314088f5013875ac656398d8a2ed19d2a85c8edd3ec2aef
@@ -168,6 +175,7 @@ def init_p384():
                   context,
                   "NIST P-384",
                   "ecdsa-sha2-nistp384")
+    global p384_names
     _curves.update(dict.fromkeys(p384_names, p384))
 
 
@@ -176,6 +184,8 @@ del init_p384
 
 
 p521_names = ["p521", "NIST P-521", "P-521", "prime521v1", "secp521r1"]
+
+
 def init_p521():
     p = 0x000001ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     b = 0x00000051953eb9618e1c9a1f929a21a0b68540eea2da725b99b315f3b8b489918ef109e156193951ec7e937b1652c0bd3bb1bf073573df883d2c34f1ef451fd46b503f00
@@ -210,6 +220,7 @@ def init_p521():
                   context,
                   "NIST P-521",
                   "ecdsa-sha2-nistp521")
+    global p521_names
     _curves.update(dict.fromkeys(p521_names, p521))
 
 
@@ -330,7 +341,7 @@ class EccPoint(object):
             raise ValueError("Error %d while encoding an EC point" % result)
 
         return (Integer(bytes_to_long(xb)), Integer(bytes_to_long(yb)))
-    
+
     def size_in_bytes(self):
         """Size of each coordinate, in bytes."""
         return (self.size_in_bits() + 7) // 8
@@ -468,7 +479,7 @@ class EccKey(object):
         else:
             extra = ""
         x, y = self.pointQ.xy
-        return "EccKey(curve='%s', x=%d, y=%d%s)" % (self.desc, x, y, extra)
+        return "EccKey(curve='%s', point_x=%d, point_y=%d%s)" % (self._curve.desc, x, y, extra)
 
     def has_private(self):
         """``True`` if this key can be used for making signatures or decrypting data."""
@@ -1060,7 +1071,19 @@ def import_key(encoded, passphrase=None):
 
     # PEM
     if encoded.startswith(b'-----'):
-        der_encoded, marker, enc_flag = PEM.decode(tostr(encoded), passphrase)
+
+        text_encoded = tostr(encoded)
+
+        # Remove any EC PARAMETERS section
+        # Ignore its content because the curve type must be already given in the key
+        if sys.version_info[:2] != (2, 6):
+            ecparams_start = "-----BEGIN EC PARAMETERS-----"
+            ecparams_end = "-----END EC PARAMETERS-----"
+            text_encoded = re.sub(ecparams_start + ".*?" + ecparams_end, "",
+                                  text_encoded,
+                                  flags=re.DOTALL)
+
+        der_encoded, marker, enc_flag = PEM.decode(text_encoded, passphrase)
         if enc_flag:
             passphrase = None
         try:
@@ -1076,7 +1099,7 @@ def import_key(encoded, passphrase=None):
         return _import_openssh(encoded)
 
     # DER
-    if bord(encoded[0]) == 0x30:
+    if len(encoded) > 0 and bord(encoded[0]) == 0x30:
         return _import_der(encoded, passphrase)
 
     raise ValueError("ECC key format is not supported")
@@ -1100,4 +1123,3 @@ if __name__ == "__main__":
     for x in range(count):
         pointX = pointX * d
     print("(P-256 arbitrary point)", (time.time() - start) / count * 1000, "ms")
-
