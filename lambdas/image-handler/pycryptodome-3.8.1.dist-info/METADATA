@@ -1,14 +1,15 @@
 Metadata-Version: 2.1
 Name: pycryptodome
-Version: 3.8.0
+Version: 3.8.1
 Summary: Cryptographic library for Python
 Home-page: https://www.pycryptodome.org
 Author: Helder Eijs
 Author-email: helderijs@gmail.com
-License: BSD, Public Domain
+License: BSD, Public Domain, Apache
 Platform: Posix; MacOS X; Windows
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: License :: OSI Approved :: BSD License
+Classifier: License :: OSI Approved :: Apache Software License
 Classifier: License :: Public Domain
 Classifier: Intended Audience :: Developers
 Classifier: Operating System :: Unix
@@ -49,7 +50,7 @@ for instance:
 * Authenticated encryption modes (GCM, CCM, EAX, SIV, OCB)
 * Accelerated AES on Intel platforms via AES-NI
 * First class support for PyPy
-* Elliptic curves cryptography (NIST P-256 curve only)
+* Elliptic curves cryptography (NIST P-256, P-384 and P-521 curves only)
 * Better and more compact API (`nonce` and `iv` attributes for ciphers,
   automatic generation of random nonces and IVs, simplified CTR cipher mode,
   and more)

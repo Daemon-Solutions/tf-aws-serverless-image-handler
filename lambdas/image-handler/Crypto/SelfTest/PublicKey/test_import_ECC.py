@@ -28,6 +28,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 # ===================================================================
 
+import sys
 import unittest
 from binascii import unhexlify
 
@@ -93,6 +94,12 @@ def create_ref_keys_p521():
 
 def get_fixed_prng():
         return SHAKE128.new().update(b"SEED").read
+
+
+class TestImport(unittest.TestCase):
+
+    def test_empty(self):
+        self.assertRaises(ValueError, ECC.import_key, b"")
 
 
 class TestImport_P256(unittest.TestCase):
@@ -174,8 +181,15 @@ class TestImport_P256(unittest.TestCase):
         key = ECC.import_key(key_file)
         self.assertEqual(self.ref_private, key)
 
+    def test_import_private_pem_with_ecparams(self):
+        if sys.version_info[:2] == (2, 6):
+            return
+        key_file = load_file("ecc_p256_private_ecparams.pem")
+        key = ECC.import_key(key_file)
+        # We just check if the import succeeds
+
     def test_import_private_pem_encrypted(self):
-        for algo in "des3", : # TODO: , "aes128", "aes192", "aes256_gcm":
+        for algo in "des3", "aes128", "aes192", "aes256_gcm":
             key_file = load_file("ecc_p256_private_enc_%s.pem" % algo)
 
             key = ECC.import_key(key_file, "secret")
@@ -280,7 +294,7 @@ class TestImport_P384(unittest.TestCase):
         self.assertEqual(self.ref_private, key)
 
     def test_import_private_pem_encrypted(self):
-        for algo in "des3", : # TODO: , "aes128", "aes192", "aes256_gcm":
+        for algo in "des3", "aes128", "aes192", "aes256_gcm":
             key_file = load_file("ecc_p384_private_enc_%s.pem" % algo)
 
             key = ECC.import_key(key_file, "secret")
@@ -385,7 +399,7 @@ class TestImport_P521(unittest.TestCase):
         self.assertEqual(self.ref_private, key)
 
     def test_import_private_pem_encrypted(self):
-        for algo in "des3", : # TODO: , "aes128", "aes192", "aes256_gcm":
+        for algo in "des3", "aes128", "aes192", "aes256_gcm":
             key_file = load_file("ecc_p521_private_enc_%s.pem" % algo)
 
             key = ECC.import_key(key_file, "secret")
@@ -1226,6 +1240,7 @@ vv6oYkMIIi7r5oQWAiQDrR2mlrrFDL9V7GH/r8SWQw==
 
 def get_tests(config={}):
     tests = []
+    tests += list_test_cases(TestImport)
     tests += list_test_cases(TestImport_P256)
     tests += list_test_cases(TestImport_P384)
     tests += list_test_cases(TestImport_P521)
