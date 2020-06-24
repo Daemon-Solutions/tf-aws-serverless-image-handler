@@ -2,17 +2,17 @@
 
 This module provides a CloudFront distribution for image manipulation, such as resizing, quality reduction or feature detection and sources the images from an s3 bucket you provide.
 
-CloudFront logs are stored in a provided s3 bucket, and optionally the Lambda function logs can be sent to s3 or Elasticsearch.
+CloudFront logs are stored in a provided s3 bucket.
 
 This solution was adapted from https://github.com/awslabs/serverless-image-handler
-
-See https://github.com/thumbor/thumbor/wiki/security for generating safe URL's used to prevent DoS attacks. A simple Python script can be found in `tests/python/safe_url.py` for demonstration purposes.
 
 ### Request path
 
 CloudFront -> API Gateway -> Lambda -> s3
 
 ## Supported Filters
+
+Note: These are Thumbor filters and may not work correctly with the current SharpJS version. See https://sharp.pixelplumbing.com/
 
 | Filter Name |  Filter Syntax |
 |-------------|----------------|
@@ -45,71 +45,70 @@ A simple usage example:
 module "serverless_image_handler" {
   source = "../"
 
-  origin_bucket = "${aws_s3_bucket.media.id}"
-  log_bucket    = "${aws_s3_bucket.logs.id}"
+  origin_bucket = aws_s3_bucket.media.id
+  log_bucket    = aws_s3_bucket.logs.id
 
   cf_aliases             = ["media.trynotto.click"]
-  cf_acm_certificate_arn = "${aws_acm_certificate.media.arn}"
-
-  enable_s3_logs = true
-
-  allow_unsafe_url = "False"
-  security_key     = "testing"
+  cf_acm_certificate_arn = aws_acm_certificate.media.arn
 }
 ```
 
-An image called `face.jpg` resized to `200x200` and smart cropped can then be accessed via the safe URL:
+An image called `face.jpg` resized to `200x200` can then be accessed via the URL:
 
-`https://media.trynotto.click/IiQkNqQ9I8T-Jh-NLZk8F4Kwkyg=/200x200/smart/face.jpg`
+`https://media.trynotto.click/fit-in/200x200/face.jpg`
 
 More advanced options can be configured with additional variables. See below.
+
+## Requirements
+
+| Name | Version |
+|------|---------|
+| terraform | >= 0.12 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| aws | n/a |
+| random | n/a |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| allow\_unsafe\_url | Allow unencrypted URL's. | string | `"True"` | no |
-| auto\_webp | Automatically return Webp format images based on the client Accept header. | string | `"False"` | no |
-| aws\_endpoint | AWS s3 endpoint per region. | map | `<map>` | no |
-| cf\_404\_min\_ttl | Minumum TTL of 404 responses. | string | `"60"` | no |
-| cf\_500\_min\_ttl | Minumum TTL of 500 responses. | string | `"0"` | no |
-| cf\_501\_min\_ttl | Minumum TTL of 501 responses. | string | `"0"` | no |
-| cf\_502\_min\_ttl | Minumum TTL of 502 responses. | string | `"0"` | no |
-| cf\_503\_min\_ttl | Minumum TTL of 503 responses. | string | `"0"` | no |
-| cf\_504\_min\_ttl | Minumum TTL of 504 responses. | string | `"0"` | no |
-| cf\_acm\_certificate\_arn | ACM certificate to use with the created CloudFront distribution. | string | n/a | yes |
-| cf\_aliases | Aliases for the CloudFront distribution. | list | n/a | yes |
-| cf\_compress | Enable automatic response compression. | string | `"false"` | no |
-| cf\_default\_ttl | Default TTL in seconds. | string | `"86400"` | no |
-| cf\_enabled | State of the CloudFront distribution. | string | `"true"` | no |
-| cf\_ipv6 | Enable IPv6 on the CloudFront distribution. | string | `"true"` | no |
-| cf\_log\_prefix | CloudFront log prefix. | string | `"cloudfront/"` | no |
-| cf\_max\_ttl | Maximum TTL in seconds. | string | `"31536000"` | no |
-| cf\_min\_ttl | Minimum TTL in seconds. | string | `"0"` | no |
-| cf\_price\_class | Price class of the CloudFront distribution. | string | `"PriceClass_All"` | no |
-| cf\_ssl\_support\_method | Method by which CloudFront serves HTTPS requests. | string | `"sni-only"` | no |
-| cors\_origin | Value returned by the API in the Access-Control-Allow-Origin header. A star (*) value will support any origin. | string | `"*"` | no |
-| cw\_log\_prefix | CloudWatch log prefix. | string | `"cloudwatch/"` | no |
-| enable\_cors | Enable API Cross-Origin Resource Sharing (CORS) support. | string | `"No"` | no |
-| enable\_es\_logs | Enable sending Lambda logs to Elasticsearch via Firehose. | string | `"false"` | no |
-| enable\_s3\_logs | Enable sending Lambda CloudWatch logs to s3 via Firehose. | string | `"false"` | no |
-| es\_logs\_domain | Elasticsearch domain ARN to send CloudWatch logs to. | string | `""` | no |
-| es\_logs\_index\_name | Elasticsearch index name for CloudWatch logs. | string | `""` | no |
-| es\_logs\_type\_name | Name of the log type sent to Elasticsearch from CloudWatch logs. | string | `""` | no |
-| log\_bucket | Bucket where to store logs. | string | n/a | yes |
-| log\_level | Lambda image handler log level. | string | `"INFO"` | no |
-| log\_retention | Log retention in days. | string | `"30"` | no |
-| logs\_filter\_pattern | Metric filter to filter logs sent from CloudWatch to s3 or Elasticsearch. | string | `"?\"[INFO]\" ?\"[WARNING]\" ?\"[ERROR]\""` | no |
-| memory\_size | Memory to assign to the image Lambda function. | string | `"1536"` | no |
-| name | Custom name for created resources. | string | `"tf-aws-serverless-image-handler"` | no |
-| origin\_bucket | Bucket where the source images reside. | string | n/a | yes |
-| preserve\_exif\_info | Preserves exif information in generated images. Increases image size. | string | `"False"` | no |
-| random\_byte\_length | The byte length of the random id generator used for unique resource names. | string | `"4"` | no |
-| s3\_cache\_expiry | Number of days in which the cached images will expire in s3. | string | `"365"` | no |
-| security\_key | Key to use to generate safe URL's. | string | `""` | no |
-| send\_anonymous\_data | Send anonymous usage data to Amazon. | string | `"No"` | no |
-| timeout | Timeout in seconds of the image Lambda function. | string | `"20"` | no |
-| web\_acl\_id | WAF ACL to use with the CloudFront distribution. | string | `""` | no |
+|------|-------------|------|---------|:--------:|
+| auto\_webp | Automatically return Webp format images based on the client Accept header. | `string` | `"False"` | no |
+| cf\_404\_min\_ttl | Minumum TTL of 404 responses. | `string` | `"60"` | no |
+| cf\_500\_min\_ttl | Minumum TTL of 500 responses. | `string` | `"0"` | no |
+| cf\_501\_min\_ttl | Minumum TTL of 501 responses. | `string` | `"0"` | no |
+| cf\_502\_min\_ttl | Minumum TTL of 502 responses. | `string` | `"0"` | no |
+| cf\_503\_min\_ttl | Minumum TTL of 503 responses. | `string` | `"0"` | no |
+| cf\_504\_min\_ttl | Minumum TTL of 504 responses. | `string` | `"0"` | no |
+| cf\_acm\_certificate\_arn | ACM certificate to use with the created CloudFront distribution. | `any` | n/a | yes |
+| cf\_aliases | Aliases for the CloudFront distribution. | `list(string)` | n/a | yes |
+| cf\_compress | Enable automatic response compression. | `string` | `"false"` | no |
+| cf\_default\_ttl | Default TTL in seconds. | `string` | `"86400"` | no |
+| cf\_enabled | State of the CloudFront distribution. | `string` | `"true"` | no |
+| cf\_ipv6 | Enable IPv6 on the CloudFront distribution. | `string` | `"true"` | no |
+| cf\_log\_prefix | CloudFront log prefix. | `string` | `"cloudfront/"` | no |
+| cf\_max\_ttl | Maximum TTL in seconds. | `string` | `"31536000"` | no |
+| cf\_min\_ttl | Minimum TTL in seconds. | `string` | `"0"` | no |
+| cf\_price\_class | Price class of the CloudFront distribution. | `string` | `"PriceClass_All"` | no |
+| cf\_ssl\_support\_method | Method by which CloudFront serves HTTPS requests. | `string` | `"sni-only"` | no |
+| cors\_origin | Value returned by the API in the Access-Control-Allow-Origin header. A star (\*) value will support any origin. | `string` | `"*"` | no |
+| cw\_log\_prefix | CloudWatch log prefix. | `string` | `"cloudwatch/"` | no |
+| enable\_cors | Enable API Cross-Origin Resource Sharing (CORS) support. | `string` | `"No"` | no |
+| log\_bucket | Bucket where to store logs. | `any` | n/a | yes |
+| log\_retention | Log retention in days. | `number` | `30` | no |
+| memory\_size | Memory to assign to the image Lambda function. | `string` | `"1536"` | no |
+| name | Custom name for created resources. | `string` | `"tf-aws-serverless-image-handler"` | no |
+| origin\_bucket | Bucket where the source images reside. | `any` | n/a | yes |
+| random\_byte\_length | The byte length of the random id generator used for unique resource names. | `number` | `4` | no |
+| rewrite\_match\_pattern | Regex for matching custom image requests using the rewrite function. | `string` | `""` | no |
+| rewrite\_substitution | Substitution string for matching custom image requests using the rewrite function. | `string` | `""` | no |
+| safe\_url | Toggle to enable safe URL's. | `string` | `"False"` | no |
+| security\_key | Key to use to generate safe URL's. | `string` | `""` | no |
+| timeout | Timeout in seconds of the image Lambda function. | `string` | `"20"` | no |
+| web\_acl\_id | WAF ACL to use with the CloudFront distribution. | `string` | `""` | no |
 
 ## Outputs
 
@@ -118,4 +117,3 @@ More advanced options can be configured with additional variables. See below.
 | cf\_domain\_name | Domain name of the created CloudFront distribution. |
 | image\_handler\_bucket | Bucket created to store the Lambda function. |
 | image\_handler\_log\_group | CloudWatch log group for the image handler. |
-| log\_processor\_log\_group | CloudWatch log group for the log processor. |
