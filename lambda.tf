@@ -1,38 +1,30 @@
-resource "aws_lambda_function" "lambda" {
-  depends_on = [
-    "aws_s3_bucket_object.lambda",
-  ]
+module "lambda" {
+  source  = "raymondbutcher/lambda-builder/aws"
+  version = "1.0.2"
 
-  s3_bucket        = "${aws_s3_bucket.bucket.id}"
-  s3_key           = "serverless-image-handler.zip"
-  source_code_hash = "${base64sha256(file("${data.archive_file.lambda.output_path}"))}"
-  function_name    = "${var.name}-${random_id.id.hex}"
-  description      = "Serverless Image Handler: This function is invoked by the serverless-image-handler API Gateway to manipulate images with Thumbor."
-  role             = "${aws_iam_role.lambda.arn}"
-  handler          = "image_handler/lambda_function.lambda_handler"
-  runtime          = "python2.7"
-  timeout          = "${var.timeout}"
-  memory_size      = "${var.memory_size}"
+  function_name = "${var.name}-${random_id.id.hex}"
+  description   = "Serverless Image Handler: This function is invoked by the serverless-image-handler API Gateway to manipulate images with SharpJS."
+  handler       = "index.handler"
+  runtime       = "nodejs12.x"
+  s3_bucket     = aws_s3_bucket.bucket.id
+  create_role   = false
+  role          = aws_iam_role.lambda.arn
+  timeout       = var.timeout
+  memory_size   = var.memory_size
 
-  environment {
+  build_mode = "LAMBDA"
+  source_dir = "${path.module}/src"
+
+  environment = {
     variables = {
-      AUTO_WEBP          = "${var.auto_webp}"
-      PRESERVE_EXIF_INFO = "${var.preserve_exif_info}"
-
-      ALLOW_UNSAFE_URL             = "${var.allow_unsafe_url}"
-      CORS_ORIGIN                  = "${var.cors_origin}"
-      ENABLE_CORS                  = "${var.enable_cors}"
-      LOG_LEVEL                    = "${var.log_level}"
-      REKOGNITION_REGION           = "${data.aws_region.current.name}"
-      SECURITY_KEY                 = "${var.security_key}"
-      SEND_ANONYMOUS_DATA          = "${var.send_anonymous_data}"
-      TC_AWS_ENDPOINT              = "${var.aws_endpoint[data.aws_region.current.name]}"
-      TC_AWS_LOADER_BUCKET         = "${var.origin_bucket}"
-      TC_AWS_REGION                = "${data.aws_region.current.name}"
-      TC_AWS_RESULT_STORAGE_BUCKET = "${aws_s3_bucket.cache.id}"
-      UUID                         = "${random_uuid.lambda.result}"
+      AUTO_WEBP             = var.auto_webp
+      CORS_ORIGIN           = var.cors_origin
+      ENABLE_CORS           = var.enable_cors
+      REWRITE_MATCH_PATTERN = var.rewrite_match_pattern
+      REWRITE_SUBSTITUTION  = var.rewrite_substitution
+      SAFE_URL              = var.safe_url
+      SECURITY_KEY          = var.security_key
+      SOURCE_BUCKETS        = var.origin_bucket
     }
   }
 }
-
-resource "random_uuid" "lambda" {}

@@ -1,12 +1,22 @@
-from libthumbor import CryptoURL
+import hashlib
+import hmac
+import base64
 
-crypto = CryptoURL(key='testing')
+def make_digest(message, key):
 
-encrypted_url = crypto.generate(
-    width=200,
-    height=200,
-    smart=True,
-    image_url='face.jpg'
-)
+    key = bytes(key, 'UTF-8')
+    message = bytes(message, 'UTF-8')
 
-print("https://media.trynotto.click" + encrypted_url)
+    digester = hmac.new(key, message, hashlib.sha1)
+    signature1 = digester.digest()
+
+    signature2 = base64.urlsafe_b64encode(signature1)
+
+    return str(signature2, 'UTF-8')
+
+
+path = 'fit-in/200x200/face.jpg'
+key  = 'testing'
+
+result = make_digest(path, key)
+print('https://media.trynotto.click/' + result + '/' + path)

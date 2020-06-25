@@ -17,25 +17,10 @@ variable "log_bucket" {
   description = "Bucket where to store logs."
 }
 
-variable "s3_cache_expiry" {
-  description = "Number of days in which the cached images will expire in s3."
-  default     = "365"
-}
-
 # Image handler Lambda
 variable "auto_webp" {
   description = "Automatically return Webp format images based on the client Accept header."
   default     = "False"
-}
-
-variable "preserve_exif_info" {
-  description = "Preserves exif information in generated images. Increases image size."
-  default     = "False"
-}
-
-variable "allow_unsafe_url" {
-  description = "Allow unencrypted URL's."
-  default     = "True"
 }
 
 variable "cors_origin" {
@@ -48,14 +33,24 @@ variable "enable_cors" {
   default     = "No"
 }
 
-variable "log_level" {
-  description = "Lambda image handler log level."
-  default     = "INFO"
-}
-
 variable "memory_size" {
   description = "Memory to assign to the image Lambda function."
   default     = "1536"
+}
+
+variable "rewrite_match_pattern" {
+  description = "Regex for matching custom image requests using the rewrite function."
+  default     = ""
+}
+
+variable "rewrite_substitution" {
+  description = "Substitution string for matching custom image requests using the rewrite function."
+  default     = ""
+}
+
+variable "safe_url" {
+  description = "Toggle to enable safe URL's."
+  default     = "False"
 }
 
 variable "security_key" {
@@ -63,36 +58,9 @@ variable "security_key" {
   default     = ""
 }
 
-variable "send_anonymous_data" {
-  description = "Send anonymous usage data to Amazon."
-  default     = "No"
-}
-
 variable "timeout" {
   description = "Timeout in seconds of the image Lambda function."
   default     = "20"
-}
-
-variable "aws_endpoint" {
-  description = "AWS s3 endpoint per region."
-
-  default = {
-    us-east-1      = "https://s3.amazonaws.com"
-    us-east-2      = "https://s3.us-east-2.amazonaws.com"
-    us-west-1      = "https://s3-us-west-1.amazonaws.com"
-    us-west-2      = "https://s3-us-west-2.amazonaws.com"
-    ca-central-1   = "https://s3.ca-central-1.amazonaws.com"
-    eu-west-1      = "https://s3-eu-west-1.amazonaws.com"
-    eu-central-1   = "https://s3.eu-central-1.amazonaws.com"
-    eu-west-2      = "https://s3.eu-west-2.amazonaws.com"
-    eu-west-3      = "https://s3.eu-west-3.amazonaws.com"
-    ap-northeast-1 = "https://s3-ap-northeast-1.amazonaws.com"
-    ap-northeast-2 = "https://s3.ap-northeast-2.amazonaws.com"
-    ap-southeast-1 = "https://s3-ap-southeast-1.amazonaws.com"
-    ap-southeast-2 = "https://s3-ap-southeast-2.amazonaws.com"
-    ap-south-1     = "https://s3.ap-south-1.amazonaws.com"
-    sa-east-1      = "https://s3-sa-east-1.amazonaws.com"
-  }
 }
 
 # CloudFront
@@ -102,7 +70,7 @@ variable "cf_acm_certificate_arn" {
 
 variable "cf_aliases" {
   description = "Aliases for the CloudFront distribution."
-  type        = "list"
+  type        = list(string)
 }
 
 variable "cf_enabled" {
@@ -194,34 +162,4 @@ variable "cw_log_prefix" {
 variable "log_retention" {
   description = "Log retention in days."
   default     = 30
-}
-
-variable "logs_filter_pattern" {
-  description = "Metric filter to filter logs sent from CloudWatch to s3 or Elasticsearch."
-  default     = "?\"[INFO]\" ?\"[WARNING]\" ?\"[ERROR]\""
-}
-
-variable "enable_s3_logs" {
-  description = "Enable sending Lambda CloudWatch logs to s3 via Firehose."
-  default     = false
-}
-
-variable "enable_es_logs" {
-  description = "Enable sending Lambda logs to Elasticsearch via Firehose."
-  default     = false
-}
-
-variable "es_logs_domain" {
-  description = "Elasticsearch domain ARN to send CloudWatch logs to."
-  default     = ""
-}
-
-variable "es_logs_index_name" {
-  description = "Elasticsearch index name for CloudWatch logs."
-  default     = ""
-}
-
-variable "es_logs_type_name" {
-  description = "Name of the log type sent to Elasticsearch from CloudWatch logs."
-  default     = ""
 }
