@@ -117,3 +117,4 @@ More advanced options can be configured with additional variables. See below.
 | cf\_domain\_name | Domain name of the created CloudFront distribution. |
 | image\_handler\_bucket | Bucket created to store the Lambda function. |
 | image\_handler\_log\_group | CloudWatch log group for the image handler. |
+| image\_handler\_log\_group\_arn | CloudWatch log group ARN for the image handler. |
