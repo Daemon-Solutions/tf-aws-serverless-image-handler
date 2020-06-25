@@ -12,3 +12,8 @@ output "image_handler_log_group" {
   description = "CloudWatch log group for the image handler."
   value       = aws_cloudwatch_log_group.image.name
 }
+
+output "image_handler_log_group_arn" {
+  description = "CloudWatch log group ARN for the image handler."
+  value       = aws_cloudwatch_log_group.image.arn
+}
