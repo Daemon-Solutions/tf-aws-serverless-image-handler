@@ -1,3 +1,8 @@
+output "cf_distribution_id" {
+  description = "Distribution ID of the created CloudFront distribution."
+  value       = aws_cloudfront_distribution.distribution.id
+}
+
 output "cf_domain_name" {
   description = "Domain name of the created CloudFront distribution."
   value       = aws_cloudfront_distribution.distribution.domain_name
