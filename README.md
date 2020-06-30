@@ -114,6 +114,7 @@ More advanced options can be configured with additional variables. See below.
 
 | Name | Description |
 |------|-------------|
+| cf\_distribution\_id | Distribution ID of the created CloudFront distribution. |
 | cf\_domain\_name | Domain name of the created CloudFront distribution. |
 | image\_handler\_bucket | Bucket created to store the Lambda function. |
 | image\_handler\_log\_group | CloudWatch log group for the image handler. |
