@@ -92,9 +92,9 @@ More advanced options can be configured with additional variables. See below.
 | cf\_log\_prefix | CloudFront log prefix. | `string` | `"cloudfront/"` | no |
 | cf\_max\_ttl | Maximum TTL in seconds. | `string` | `"31536000"` | no |
 | cf\_min\_ttl | Minimum TTL in seconds. | `string` | `"0"` | no |
-| cf\_ordered\_cache\_behavior | Additional cache behaviors for the created CloudFront distribution. | `list` | `[]` | no |
+| cf\_ordered\_cache\_behavior | Additional cache behaviors for the created CloudFront distribution. | <pre>list(object({<br>    path_pattern                      = string<br>    allowed_methods                   = list(string)<br>    cached_methods                    = list(string)<br>    compress                          = string<br>    target_origin_id                  = string<br>    forward_query_string              = string<br>    forward_query_string_cache_keys   = list(string)<br>    forward_cookies                   = string<br>    forward_cookies_whitelisted_names = list(string)<br>    forward_headers                   = list(string)<br>    viewer_protocol_policy            = string<br>    min_ttl                           = number<br>    default_ttl                       = number<br>    max_ttl                           = number<br>    trusted_signers                   = list(string)<br>    smooth_streaming                  = string<br>    field_level_encryption_id         = string<br>  }))</pre> | `[]` | no |
 | cf\_price\_class | Price class of the CloudFront distribution. | `string` | `"PriceClass_All"` | no |
-| cf\_s3\_origin | Additional s3 origins for the created CloudFront distribution. | `list` | `[]` | no |
+| cf\_s3\_origin | Additional s3 origins for the created CloudFront distribution. | <pre>list(object({<br>    domain_name            = string<br>    origin_id              = string<br>    origin_access_identity = string<br>  }))</pre> | `[]` | no |
 | cf\_ssl\_support\_method | Method by which CloudFront serves HTTPS requests. | `string` | `"sni-only"` | no |
 | cors\_origin | Value returned by the API in the Access-Control-Allow-Origin header. A star (\*) value will support any origin. | `string` | `"*"` | no |
 | cw\_log\_prefix | CloudWatch log prefix. | `string` | `"cloudwatch/"` | no |
