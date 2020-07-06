@@ -78,6 +78,40 @@ variable "cf_enabled" {
   default     = "true"
 }
 
+variable "cf_s3_origin" {
+  description = "Additional s3 origins for the created CloudFront distribution."
+  default     = []
+  type = list(object({
+    domain_name            = string
+    origin_id              = string
+    origin_access_identity = string
+  }))
+}
+
+variable "cf_ordered_cache_behavior" {
+  description = "Additional cache behaviors for the created CloudFront distribution."
+  default     = []
+  type = list(object({
+    path_pattern                      = string
+    allowed_methods                   = list(string)
+    cached_methods                    = list(string)
+    compress                          = string
+    target_origin_id                  = string
+    forward_query_string              = string
+    forward_query_string_cache_keys   = list(string)
+    forward_cookies                   = string
+    forward_cookies_whitelisted_names = list(string)
+    forward_headers                   = list(string)
+    viewer_protocol_policy            = string
+    min_ttl                           = number
+    default_ttl                       = number
+    max_ttl                           = number
+    trusted_signers                   = list(string)
+    smooth_streaming                  = string
+    field_level_encryption_id         = string
+  }))
+}
+
 variable "cf_compress" {
   description = "Enable automatic response compression."
   default     = "false"
