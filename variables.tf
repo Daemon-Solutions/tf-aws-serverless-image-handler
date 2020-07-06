@@ -78,6 +78,18 @@ variable "cf_enabled" {
   default     = "true"
 }
 
+variable "cf_s3_origin" {
+  description = "Additional s3 origins for the created CloudFront distribution."
+  default     = []
+  type        = list
+}
+
+variable "cf_ordered_cache_behavior" {
+  description = "Additional cache behaviors for the created CloudFront distribution."
+  default     = []
+  type        = list
+}
+
 variable "cf_compress" {
   description = "Enable automatic response compression."
   default     = "false"

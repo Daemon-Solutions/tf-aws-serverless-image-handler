@@ -92,7 +92,9 @@ More advanced options can be configured with additional variables. See below.
 | cf\_log\_prefix | CloudFront log prefix. | `string` | `"cloudfront/"` | no |
 | cf\_max\_ttl | Maximum TTL in seconds. | `string` | `"31536000"` | no |
 | cf\_min\_ttl | Minimum TTL in seconds. | `string` | `"0"` | no |
+| cf\_ordered\_cache\_behavior | Additional cache behaviors for the created CloudFront distribution. | `list` | `[]` | no |
 | cf\_price\_class | Price class of the CloudFront distribution. | `string` | `"PriceClass_All"` | no |
+| cf\_s3\_origin | Additional s3 origins for the created CloudFront distribution. | `list` | `[]` | no |
 | cf\_ssl\_support\_method | Method by which CloudFront serves HTTPS requests. | `string` | `"sni-only"` | no |
 | cors\_origin | Value returned by the API in the Access-Control-Allow-Origin header. A star (\*) value will support any origin. | `string` | `"*"` | no |
 | cw\_log\_prefix | CloudWatch log prefix. | `string` | `"cloudwatch/"` | no |

@@ -17,6 +17,17 @@ resource "aws_cloudfront_distribution" "distribution" {
     }
   }
 
+  dynamic "origin" {
+    for_each = var.cf_s3_origin
+    content {
+      domain_name = origin.value["domain_name"]
+      origin_id   = origin.value["origin_id"]
+      s3_origin_config {
+        origin_access_identity = origin.value["origin_access_identity"]
+      }
+    }
+  }
+
   enabled         = var.cf_enabled
   comment         = "Created with Terraform"
   is_ipv6_enabled = var.cf_ipv6
@@ -49,6 +60,33 @@ resource "aws_cloudfront_distribution" "distribution" {
     min_ttl                = var.cf_min_ttl
     default_ttl            = var.cf_default_ttl
     max_ttl                = var.cf_max_ttl
+  }
+
+  dynamic "ordered_cache_behavior" {
+    for_each = var.cf_ordered_cache_behavior
+    content {
+      path_pattern     = ordered_cache_behavior.value["path_pattern"]
+      allowed_methods  = ordered_cache_behavior.value["allowed_methods"]
+      cached_methods   = ordered_cache_behavior.value["cached_methods"]
+      compress         = ordered_cache_behavior.value["compress"]
+      target_origin_id = ordered_cache_behavior.value["target_origin_id"]
+      forwarded_values {
+        query_string            = ordered_cache_behavior.value["forward_query_string"]
+        query_string_cache_keys = ordered_cache_behavior.value["forward_query_string_cache_keys"]
+        cookies {
+          forward           = ordered_cache_behavior.value["forward_cookies"]
+          whitelisted_names = ordered_cache_behavior.value["forward_cookies_whitelisted_names"]
+        }
+        headers = ordered_cache_behavior.value["forward_headers"]
+      }
+      viewer_protocol_policy    = ordered_cache_behavior.value["viewer_protocol_policy"]
+      min_ttl                   = ordered_cache_behavior.value["min_ttl"]
+      default_ttl               = ordered_cache_behavior.value["default_ttl"]
+      max_ttl                   = ordered_cache_behavior.value["max_ttl"]
+      trusted_signers           = ordered_cache_behavior.value["trusted_signers"]
+      smooth_streaming          = ordered_cache_behavior.value["smooth_streaming"]
+      field_level_encryption_id = ordered_cache_behavior.value["field_level_encryption_id"]
+    }
   }
 
   restrictions {
