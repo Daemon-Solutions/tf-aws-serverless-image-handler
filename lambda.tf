@@ -1,6 +1,6 @@
 module "lambda" {
   source  = "raymondbutcher/lambda-builder/aws"
-  version = "1.0.2"
+  version = "1.1.0"
 
   function_name = "${var.name}-${random_id.id.hex}"
   description   = "Serverless Image Handler: This function is invoked by the serverless-image-handler API Gateway to manipulate images with SharpJS."
